@@ -1,0 +1,107 @@
+version: "3.0"
+
+services:
+  # Elasticsearch nodes - Search and analytics engine
+  elasticsearch-n1:
+    container_name: elasticsearch-n1
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
+    environment:
+      - node.name=elasticsearch-n1
+      - cluster.name=${CLUSTER_NAME}
+      - "discovery.type=single-node"
+      - xpack.security.enabled=true
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    volumes:
+      - es-n1-data:/usr/share/elasticsearch/data
+    networks:
+      - elk-network
+    ports:
+      - 9200:9200
+
+  # Logstash - Data ingestion tool
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
+    volumes:
+      - type: bind
+        source: ./logstash/config/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ./logstash/pipeline
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    environment:
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+    networks:
+      - elk-network
+    depends_on:
+      - elasticsearch-n1
+      - kafka
+
+  # Kibana - Data visualization and exploration tool
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch-n1:9200
+      - xpack.security.enabled=true
+      - ELASTICSEARCH_USERNAME=${ELASTIC_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+    networks:
+      - elk-network
+    depends_on:
+      - elasticsearch-n1
+    ports:
+      - 5601:5601
+
+  # Zookeeper - Synchronization
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:${KAFKA_VERSION}
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-data:/var/lib/zookeeper/log
+      - zookeeper-data:/etc/zookeeper/secrets
+    ports:
+      - 2181:2181
+    networks:
+      - elk-network
+
+  # Kafka - Message broker
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:${KAFKA_VERSION}
+    ports:
+      - 19092:19092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+      - kafka-data:/etc/kafka/secrets
+    networks:
+      - elk-network
+
+volumes:
+  es-n1-data:
+    driver: local
+  zookeeper-data:
+    driver: local
+  kafka-data:
+    driver: local
+
+networks:
+  elk-network:
+    driver: bridge

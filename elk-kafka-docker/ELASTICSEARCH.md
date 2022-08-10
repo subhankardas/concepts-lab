@@ -1,19 +1,8 @@
-# Elasticsearch + Kibana
-Elasticsearch is a distributed, free and open search and analytics engine for all types of data, including textual, numerical, geospatial, structured, and unstructured. Elasticsearch allows you to store, search, and analyze huge volumes of data quickly and in near real-time and give back answers in milliseconds.
-This is a sample project to demonstrate the usage of Elasticsearch.
+# Elasticsearch Guides
+Elasticsearch is a distributed, free and open search and analytics engine for all types of data, including textual, numerical, geo-spatial, structured, and unstructured. Elasticsearch allows you to store, search, and analyze huge volumes of data quickly and in near real-time and give back answers in milliseconds.
 
-## Run Locally
-To start the Elasticsearch and Kibana as Docker containers, run the following command on docker-compose.yml
-```bash
-docker-compose -f "elasticsearch-kibana\docker-compose.yml" up -d --build
-```
 Once ES + Kibana is running successfully, open the Kibana dashboard using the following link
 [http://localhost:5601](http://localhost:5601/). Now expand the options and go to the dev tools options to run ES queries as mentioned below.
-
-## Services
-
-- Elasticsearch [http://localhost:9200](http://localhost:9200/)
-- Kibana (Dashboard) [http://localhost:5601](http://localhost:5601/)
 
 ## Document APIs
 ES is accessible from a RESTful web service interface and uses schema-less JSON. SPAs can easily use the APIs directly on http://localhost:9200.
@@ -64,7 +53,7 @@ DELETE /songs/_doc/1
 POST /songs/_doc/1?version=7&version_type=external
 {
   "title": "Summer of 69",
-  ...
+  .......
 }
 ```
 
@@ -74,7 +63,7 @@ Operation type CREATE helps to avoid the overwriting of an existing document. Th
 POST /songs/_doc/1?op_type=create
 {
   "title": "Summer of 69",
-  ...
+  .......
 }
 ```
 
@@ -84,7 +73,7 @@ When ID is not specified in index operation, then Elasticsearch automatically ge
 POST /songs/_doc/
 {
   "title": "Numb",
-  ...
+  .......
 }
 ```
 
