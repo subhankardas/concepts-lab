@@ -1,0 +1,2 @@
+{"id":2,"type":"INFO","message":"Retrying to establish connection.","timestamp":"2022-09-19T04:31:42Z"}
+{"id":3,"type":"DEBUG","message":"Got empty response from user service.","timestamp":"2022-09-19T04:31:42Z"}

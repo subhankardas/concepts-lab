@@ -13,6 +13,7 @@ To start the Docker containers, run the following command on docker-compose.yml
 docker-compose -f "docker-compose.yml" up -d --build
 ```
 While running a multi-node cluster for Elasticsearch we might see the below issue in the logs.
+
 ```max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]```
 
 To fix this issue, run the commands mentioned [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
@@ -23,8 +24,9 @@ To fix this issue, run the commands mentioned [here](https://www.elastic.co/guid
 - Kibana (Dashboard) [http://localhost:5601](http://localhost:5601/)
 
 ## Use Cases
-#### 1. Log messages from Kafka
+#### 1. Logging messages from Kafka
 ![ELK-KAFKA-ARCHITECTURE](docs/elk-kafka.png)
+
 Once the Kafka container is running successfully, attach a bash shell to the container and run the following commands to send messages on the topics **student** and **employee**.
 ```bash
 kafka-console-producer --broker-list localhost:9092 --topic student
@@ -36,3 +38,10 @@ Now login to Kibana and navigate through menu **Management** > **Stack Managemen
 Create an index pattern as **data*** and navigate to Discover tab and search on this index.
 
 We will be able to search messages from Kafka topics as Logstash has ingested the messages to two new indices i.e. **data.student** and **data.employee**.
+
+#### 2. Centralized logging
+![ELK-LOGGING-ARCHITECTURE](docs/elk-logging.jpeg)
+
+Once the Filebeat(B) container runs successfully, it will deploy logging agents for shipping logs from the provided input paths in the YAML file and outputs the data to Logstash. Data is then forwarded to Elasticsearch and two indices are created **app1-log** and **app2-log** for storing logs from both the app1 and app2.
+
+Now we can create two index patterns *app1* and *app2* with the timestamp filter to view our logs in the *Discover* tab.

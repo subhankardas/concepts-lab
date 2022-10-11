@@ -1,0 +1,25 @@
+# ========== INPUTS ==========
+filebeat.inputs:
+  - type: log
+    enabled: true
+    tags: ["app1"] # adding tags to differentiate logs
+    paths:
+      - /usr/share/filebeat/app1/log/*.log
+  - type: log
+    enabled: true
+    tags: ["app2"]
+    paths:
+      - /usr/share/filebeat/app2/*.log
+
+# ========= PROCESSORS ========
+processors:
+  - add_docker_metadata:
+      host: "unix:///host_docker/docker.sock" # add docker info (required to identify docker instances)
+
+filebeat.config.modules:
+  reload.enabled: false # enable config reloading
+  reload.period: 5s # time interval after which file is checked for changes
+
+# =========== OUTPUT ==========
+output.logstash:
+  hosts: ["logstash:5044"]

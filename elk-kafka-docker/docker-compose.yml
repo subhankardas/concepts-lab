@@ -1,7 +1,7 @@
 version: "3.0"
 
 services:
-  # Elasticsearch nodes - Search and analytics engine
+  # elasticsearch nodes - search and analytics engine
   elasticsearch-n1:
     container_name: elasticsearch-n1
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
@@ -13,13 +13,13 @@ services:
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     volumes:
-      - es-n1-data:/usr/share/elasticsearch/data
+      - elasticsearch-n1-data:/usr/share/elasticsearch/data
     networks:
       - elk-network
     ports:
       - 9200:9200
 
-  # Logstash - Data ingestion tool
+  # logstash - data collection and processing tool
   logstash:
     container_name: logstash
     image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
@@ -38,11 +38,14 @@ services:
       LS_JAVA_OPTS: "-Xmx512m -Xms512m"
     networks:
       - elk-network
+    ports:
+      - "9600:9600"
+      - "5044:5044"
     depends_on:
       - elasticsearch-n1
       - kafka
 
-  # Kibana - Data visualization and exploration tool
+  # kibana - data visualization and exploration tool
   kibana:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
@@ -58,7 +61,34 @@ services:
     ports:
       - 5601:5601
 
-  # Zookeeper - Synchronization
+  # filebeat - shipping log files
+  filebeat:
+    container_name: filebeat
+    image: "docker.elastic.co/beats/filebeat:${ELK_VERSION}"
+    command: filebeat -e -strict.perms=false
+    user: root
+    volumes:
+      - type: bind
+        source: ./filebeat/filebeat.yml
+        target: /usr/share/filebeat/filebeat.yml
+        read_only: true
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - type: bind
+        source: ./app1/log
+        target: /usr/share/filebeat/app1/log
+        read_only: true
+      - type: bind
+        source: ./app2
+        target: /usr/share/filebeat/app2
+        read_only: true
+    depends_on:
+      - elasticsearch-n1
+      - logstash
+    networks:
+      - elk-network
+
+  # zookeeper - synchronization
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:${KAFKA_VERSION}
@@ -74,7 +104,7 @@ services:
     networks:
       - elk-network
 
-  # Kafka - Message broker
+  # kafka - message broker
   kafka:
     container_name: kafka
     image: confluentinc/cp-kafka:${KAFKA_VERSION}
@@ -95,7 +125,7 @@ services:
       - elk-network
 
 volumes:
-  es-n1-data:
+  elasticsearch-n1-data:
     driver: local
   zookeeper-data:
     driver: local

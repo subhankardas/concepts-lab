@@ -52,8 +52,7 @@ DELETE /songs/_doc/1
 ```http
 POST /songs/_doc/1?version=7&version_type=external
 {
-  "title": "Summer of 69",
-  .......
+  "title": "Summer of 69",..
 }
 ```
 
@@ -62,8 +61,7 @@ Operation type CREATE helps to avoid the overwriting of an existing document. Th
 ```http
 POST /songs/_doc/1?op_type=create
 {
-  "title": "Summer of 69",
-  .......
+  "title": "Summer of 69",..
 }
 ```
 
@@ -72,8 +70,7 @@ When ID is not specified in index operation, then Elasticsearch automatically ge
 ```http
 POST /songs/_doc/
 {
-  "title": "Numb",
-  .......
+  "title": "Numb",..
 }
 ```
 

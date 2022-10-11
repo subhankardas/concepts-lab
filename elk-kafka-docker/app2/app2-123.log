@@ -1,0 +1,2 @@
+2022-10-07 10:57:51.112  INFO 45469 --- [main] o.s.b.c.embedded.Engine  : Starting server at 8080
+2022-10-06 10:57:51.112  ERROR 45469 --- [ost-thread1] o.s.b.c.core.Handler  : Failed auth check for user
