@@ -45,3 +45,12 @@ We will be able to search messages from Kafka topics as Logstash has ingested th
 Once the Filebeat(B) container runs successfully, it will deploy logging agents for shipping logs from the provided input paths in the YAML file and outputs the data to Logstash. Data is then forwarded to Elasticsearch and two indices are created **app1-log** and **app2-log** for storing logs from both the app1 and app2.
 
 Now we can create two index patterns *app1* and *app2* with the timestamp filter to view our logs in the *Discover* tab.
+
+#### Dashboard
+Using the data collected from logs and indices created above we can visualize and analyze our logs. To create a similar dashboard as shown below follow these steps.
+
+**Dashboard** > **Create dashboard** > **Create visualization** > Drag and drop one field from the selected index > Select visualization type > **Save and return** 
+
+Now the visualization would automatically appear on the dashboard, we just modify the labels and size according to our requirements and your dashboard is ready!
+
+![DASHBOARD-1](docs/dashboard1.jpeg)
