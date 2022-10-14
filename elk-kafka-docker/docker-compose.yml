@@ -32,6 +32,10 @@ services:
         source: ./logstash/pipeline
         target: /usr/share/logstash/pipeline
         read_only: true
+      - type: bind
+        source: ./data/cars.csv
+        target: /usr/share/data/cars.csv
+        read_only: true
     environment:
       ELASTIC_USERNAME: ${ELASTIC_USERNAME}
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}

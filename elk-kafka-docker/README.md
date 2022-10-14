@@ -46,6 +46,9 @@ Once the Filebeat(B) container runs successfully, it will deploy logging agents 
 
 Now we can create two index patterns *app1* and *app2* with the timestamp filter to view our logs in the *Discover* tab.
 
+#### 3. Visualization from CSV data
+Logstash can watch a data source such as a *CSV* file, process incoming data, and output it into specified sources as indices. Once started, it usually stays on and watches for any changes in the data source in realtime. We can setup a pipeline to ingest this data and use it to create visual dashboards as given below.
+
 #### Dashboard
 Using the data collected from logs and indices created above we can visualize and analyze our logs. To create a similar dashboard as shown below follow these steps.
 
@@ -53,4 +56,8 @@ Using the data collected from logs and indices created above we can visualize an
 
 Now the visualization would automatically appear on the dashboard, we just modify the labels and size according to our requirements and your dashboard is ready!
 
+**1. App Logs Dashboard**
 ![DASHBOARD-1](docs/dashboard1.jpeg)
+
+**2. Sales Dashboard (using data from CSV)**
+![DASHBOARD-2](docs/dashboard2.jpeg)

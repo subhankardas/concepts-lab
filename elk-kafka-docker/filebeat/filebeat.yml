@@ -16,6 +16,23 @@ processors:
   - add_docker_metadata:
       host: "unix:///host_docker/docker.sock" # add docker info (required to identify docker instances)
 
+  - drop_fields: # remove unwanted ECS fields from the index
+      fields:
+        [
+          "agent.ephemeral_id",
+          "agent.hostname",
+          "agent.id",
+          "agent.type",
+          "agent.name",
+          "agent.version",
+          "ecs.version",
+          "host.name",
+          "input.type",
+          "log.offset",
+          "@version"
+        ]
+      ignore_missing: true
+
 filebeat.config.modules:
   reload.enabled: false # enable config reloading
   reload.period: 5s # time interval after which file is checked for changes
