@@ -39,7 +39,7 @@ Deploy Metricbeat on your Linux, Windows, and Mac hosts, connect it to Elasticse
 
 #### 2. Docker Dashboard
 Docker module fetches metrics from Docker containers. The default metricsets are: container, cpu, diskio, healthcheck, info, memory and network. The image metricset is not enabled by default.
-![ELK-DOCKER-DASHBOARD](docs/docker-dashboard.jpg)
+![ELK-DOCKER-DASHBOARD](docs/docker-dashboard.JPG)
 
 #### 3. Kafka Dashboard
 The default metricsets are consumergroup and partition. The Broker, Producer, Consumer metricsets require Jolokia to fetch JMX metrics. Refer to those Metricsets' documentation about how to use Jolokia.
@@ -58,4 +58,4 @@ msg1
 msg2
 msg3
 ```
-![ELK-KAFKA-DASHBOARD](docs/kafka-dashboard.jpg)
+![ELK-KAFKA-DASHBOARD](docs/kafka-dashboard.JPG)
