@@ -1832,7 +1832,10 @@
   ],
   "refresh": "5s",
   "schemaVersion": 39,
-  "tags": ["prometheus", "http"],
+  "tags": [
+    "prometheus",
+    "http"
+  ],
   "templating": {
     "list": []
   },

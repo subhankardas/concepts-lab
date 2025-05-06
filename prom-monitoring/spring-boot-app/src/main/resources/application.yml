@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: spring-boot-app
+
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - prometheus

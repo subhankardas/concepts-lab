@@ -8,6 +8,13 @@ scrape_configs:
         labels:
           service: "go-app"
 
+  - job_name: "spring-boot-app"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["spring-boot-app:8081"]
+        labels:
+            service: "spring-boot-app"
+
   - job_name: "prometheus"
     static_configs:
       - targets: ["localhost:9090"]
